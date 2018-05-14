@@ -27,7 +27,7 @@
 
 ## Description
 
-This is a [Consul](http://consul.io/) module for [Nest](https://github.com/nestjs/nest).
+This is a module for [Nest](https://github.com/nestjs/nest) getting configuration from consul kv.
 
 ## Installation
 
@@ -44,13 +44,40 @@ import { Module } from '@nestjs/common';
 import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
 
+const env = process.env.NODE_ENV;
+
 @Module({
   imports: [
       ConsulModule.forRoot({
         host: '127.0.0.1',
         port: 8500
       }),
-      ConsulConfigModule('user-service')
+      ConsulConfigModule({key: 'user-service', rule: key => `config__${key}__${env}`})
+  ],
+})
+export class ApplicationModule {}
+```
+
+If you use [nest-bootstrap](https://github.com/miaowing/nest-bootstrap) module and get the consul config options from it.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { ConsulModule } from 'nest-consul';
+import { ConsulConfigModule } from 'nest-consul-config';
+
+const env = process.env.NODE_ENV;
+
+@Module({
+  imports: [
+      ConsulModule.forRoot({
+        bootstrap: true,
+        bootstrapPath: 'consul'
+      }),
+      ConsulConfigModule({
+        bootstrap: true,
+        bootstrapPath: 'web.serviceName', 
+        rule: key => `config__${key}__${env}`
+      })
   ],
 })
 export class ApplicationModule {}
