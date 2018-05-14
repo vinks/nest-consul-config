@@ -43,7 +43,14 @@ export class ConsulConfig {
     });
   }
 
+  getKey() {
+    return this.key;
+  }
+
   get(path, defaults) {
+    if (!path) {
+      return this.configs;
+    }
     return get(this.configs, path, defaults);
   }
 
