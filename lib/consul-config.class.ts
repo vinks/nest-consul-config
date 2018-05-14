@@ -16,7 +16,7 @@ export class ConsulConfig {
   }
 
   async init() {
-    const result = await this.consul.get(this.key);
+    const result = await this.consul.kv.get(this.key);
     try {
       this.configs = YAML.parse(result.Value);
     } catch (e) {
