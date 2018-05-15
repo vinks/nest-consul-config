@@ -7,6 +7,7 @@ import { ConsulConfigOptions } from './consul-config.options';
 @Module({})
 export class ConsulConfigModule {
   static forRoot(options: ConsulConfigOptions): DynamicModule {
+    const env = process.env.NODE_ENV || 'development';
     const consulConfigProvider = {
       provide: 'ConsulConfigClient',
       useFactory: async (consul: Consul, bootstrap): Promise<ConsulConfig> => {
@@ -16,7 +17,7 @@ export class ConsulConfigModule {
         }
 
         if (typeof options.rule == 'function') {
-          key = options.rule(key);
+          key = options.rule(key, env);
         }
         const client = new ConsulConfig(consul, key, options);
         await client.init();
