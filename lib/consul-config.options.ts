@@ -1,7 +1,7 @@
 export interface ConsulConfigOptions {
   key?: string;
-  bootstrap?: boolean;
-  bootstrapPath?: string;
-  rule?: (key: string, env?: string) => string;
+  useBootModule?: boolean;
+  bootPath?: string;
+  rename?: (key: string, env?: string) => string;
   retry?: number;
 }

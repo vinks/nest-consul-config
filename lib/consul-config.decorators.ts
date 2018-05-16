@@ -1,3 +1,3 @@
 import { Inject } from '@nestjs/common';
 
-export const InjectConsulConfig = () => Inject('ConsulConfigClient');
+export const InjectConfig = () => Inject('ConsulConfigClient');

@@ -27,7 +27,7 @@
 
 ## Description
 
-This is a module for [Nest](https://github.com/nestjs/nest) getting configuration from consul kv.
+This is a [Nest](https://github.com/nestjs/nest) module for getting configurations from consul kv.
 
 ## Installation
 
@@ -44,7 +44,6 @@ import { Module } from '@nestjs/common';
 import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
 
-const env = process.env.NODE_ENV;
 
 @Module({
   imports: [
@@ -52,18 +51,19 @@ const env = process.env.NODE_ENV;
         host: '127.0.0.1',
         port: 8500
       }),
-      ConsulConfigModule({key: 'user-service', rule: key => `config__${key}__${env}`})
+      ConsulConfigModule({key: 'user-service', rename: (key, env) => `config__${key}__${env}`})
   ],
 })
 export class ApplicationModule {}
 ```
 
-If you use [nest-bootstrap](https://github.com/miaowing/nest-bootstrap) module and get the consul config options from it.
+If you use [nest-boot](https://github.com/miaowing/nest-boot) module.
 
 ```typescript
 import { Module } from '@nestjs/common';
 import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
+import { BootModule } from 'nest-boot';
 
 const env = process.env.NODE_ENV;
 
@@ -73,25 +73,41 @@ const env = process.env.NODE_ENV;
         bootstrap: true,
         bootstrapPath: 'consul'
       }),
-      ConsulConfigModule({
-        bootstrap: true,
-        bootstrapPath: 'web.serviceName', 
-        rule: key => `config__${key}__${env}`
+      BootModule.forRoot(__dirname, 'bootstrap.yml'),
+      ConsulConfigModule.forRoot({
+        useBootModule: true,
+        bootPath: 'web.serviceName', 
+        rename: (key, env) => `config__${key}__${env}`
       })
   ],
 })
 export class ApplicationModule {}
 ```
 
-#### Consul Config Client Injection
+##### bootstrap.yml
+
+```yaml
+web:
+  serviceName: user-service
+```
+
+#### Config Client Injection
+
+In consul kv, the key is "config__user-service__development".
+
+```yaml
+user:
+  info:
+    name: 'test'
+```
 
 ```typescript
 import { Component } from '@nestjs/common';
-import { InjectConsulConfig, ConsulConfig } from 'nest-consul-config';
+import { InjectConfig, ConsulConfig } from 'nest-consul-config';
 
 @Component()
 export class TestService {
-  constructor(@InjectConsulConfig() private readonly config: ConsulConfig) {}
+  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
 
   do() {
       const userInfo = this.config.get('user.info', {name: 'judi'});
@@ -100,14 +116,9 @@ export class TestService {
 }
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://opencollective.com/nest).
-
 ## Stay in touch
 
 - Author - [Miaowing](https://github.com/miaowing)
-- Website - [https://nestjs.com](https://nestjs.com/)
 
 ## License
 

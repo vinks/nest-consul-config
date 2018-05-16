@@ -1,6 +1,6 @@
 {
   "name": "nest-consul-config",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Nest - modern, fast, powerful node.js web framework (@consul-config)",
   "author": "Miaowing <i@zfeng.net>",
   "license": "MIT",
@@ -14,21 +14,23 @@
     "@nestjs/common": "^5.0.0"
   },
   "devDependencies": {
+    "@nestjs/common": "^5.0.0",
     "@types/node": "^7.0.41",
-    "ts-node": "^3.3.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
+    "nest-boot": "^0.1.1",
     "prettier": "^1.11.1",
+    "ts-node": "^3.3.0",
     "typescript": "^2.8.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/miaowing/nest-consul.git"
+    "url": "git+https://github.com/miaowing/nest-consul-config.git"
   },
   "bugs": {
-    "url": "https://github.com/miaowing/nest-consul/issues"
+    "url": "https://github.com/miaowing/nest-consul-config/issues"
   },
-  "homepage": "https://github.com/miaowing/nest-consul#readme",
+  "homepage": "https://github.com/miaowing/nest-consul-config#readme",
   "lint-staged": {
     "*.ts": [
       "prettier --write",
