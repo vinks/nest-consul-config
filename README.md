@@ -70,8 +70,8 @@ const env = process.env.NODE_ENV;
 @Module({
   imports: [
       ConsulModule.forRoot({
-        bootstrap: true,
-        bootstrapPath: 'consul'
+        useBootModule: true,
+        bootPath: 'consul'
       }),
       BootModule.forRoot(__dirname, 'bootstrap.yml'),
       ConsulConfigModule.forRoot({
@@ -89,6 +89,9 @@ export class ApplicationModule {}
 ```yaml
 web:
   serviceName: user-service
+consul:
+  host: localhost
+  port: 8500
 ```
 
 #### Config Client Injection
