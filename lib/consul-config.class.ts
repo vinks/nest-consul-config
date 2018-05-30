@@ -47,7 +47,7 @@ export class ConsulConfig {
     return this.key;
   }
 
-  get(path, defaults) {
+  get(path?: string, defaults?: string) {
     if (!path) {
       return this.configs;
     }
