@@ -32,7 +32,7 @@ export class ConsulConfig {
     });
     watcher.on('change', (data, res) => {
       try {
-        this.configs = YAML.parse(data);
+        this.configs = YAML.parse(data.Value);
       } catch (e) {
         this.configs = { parseErr: e };
       }

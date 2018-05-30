@@ -1,6 +1,6 @@
 {
   "name": "nest-consul-config",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Nest - modern, fast, powerful node.js web framework (@consul-config)",
   "author": "Miaowing <i@zfeng.net>",
   "license": "MIT",
