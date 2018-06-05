@@ -43,18 +43,18 @@ export class ConsulConfig {
     });
   }
 
-  getKey() {
+  getKey(): string {
     return this.key;
   }
 
-  get(path?: string, defaults?: string) {
+  get(path?: string, defaults?: any) {
     if (!path) {
       return this.configs;
     }
     return get(this.configs, path, defaults);
   }
 
-  async set(path, value) {
+  async set(path: string, value: any) {
     set(this.configs, path, value);
     const yamlString = YAML.stringify(this.configs);
     await this.consul.kv.set(this.key, yamlString);
