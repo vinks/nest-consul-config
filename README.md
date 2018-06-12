@@ -47,11 +47,11 @@ import { ConsulConfigModule } from 'nest-consul-config';
 
 @Module({
   imports: [
-      ConsulModule.forRoot({
+      ConsulModule.init({
         host: '127.0.0.1',
         port: 8500
       }),
-      ConsulConfigModule({key: 'user-service', rename: (key, env) => `config__${key}__${env}`})
+      ConsulConfigModule.init({key: 'user-service', rename: (key, env) => `config__${key}__${env}`})
   ],
 })
 export class ApplicationModule {}
@@ -65,18 +65,14 @@ import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
 import { BootModule } from 'nest-boot';
 
-const env = process.env.NODE_ENV;
-
 @Module({
   imports: [
-      ConsulModule.forRoot({
-        useBootModule: true,
-        bootPath: 'consul'
+      ConsulModule.initWithBoot({
+        path: 'consul'
       }),
       BootModule.forRoot(__dirname, 'bootstrap.yml'),
-      ConsulConfigModule.forRoot({
-        useBootModule: true,
-        bootPath: 'web.serviceName', 
+      ConsulConfigModule.initWithBoot({
+        path: 'web.serviceName', 
         rename: (key, env) => `config__${key}__${env}`
       })
   ],
