@@ -108,8 +108,8 @@ import { InjectConfig, ConsulConfig } from 'nest-consul-config';
 export class TestService {
   constructor(@InjectConfig() private readonly config: ConsulConfig) {}
 
-  do() {
-      const userInfo = this.config.get('user.info', {name: 'judi'});
+  async do() {
+      const userInfo = await this.config.get('user.info', {name: 'judi'});
       console.log(userInfo);
   }
 }
