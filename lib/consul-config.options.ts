@@ -5,12 +5,5 @@ export interface ConsulConfigOptions {
 
 export interface Options {
   key: string;
-  rename?: (key: string, env?: string) => string;
-  retry?: number;
-}
-
-export interface BootOptions {
-  path: string;
-  rename?: (key: string, env?: string) => string;
   retry?: number;
 }

@@ -44,14 +44,13 @@ import { Module } from '@nestjs/common';
 import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
 
-
 @Module({
   imports: [
-      ConsulModule.init({
+      ConsulModule.register({
         host: '127.0.0.1',
         port: 8500
       }),
-      ConsulConfigModule.init({key: 'user-service', rename: (key, env) => `config__${key}__${env}`})
+      ConsulConfigModule.register({key: `config__user-service__${process.env.NODE_ENV}`})
   ],
 })
 export class ApplicationModule {}
@@ -67,14 +66,9 @@ import { BootModule } from 'nest-boot';
 
 @Module({
   imports: [
-      ConsulModule.initWithBoot({
-        path: 'consul'
-      }),
-      BootModule.forRoot(__dirname, 'bootstrap.yml'),
-      ConsulConfigModule.initWithBoot({
-        path: 'web.serviceName', 
-        rename: (key, env) => `config__${key}__${env}`
-      })
+      ConsulModule.registerByBoot(),
+      BootModule.register(__dirname, 'bootstrap.yml'),
+      ConsulConfigModule.registerByBoot()
   ],
 })
 export class ApplicationModule {}
@@ -84,10 +78,15 @@ export class ApplicationModule {}
 
 ```yaml
 web:
+  serviceId:
   serviceName: user-service
 consul:
   host: localhost
   port: 8500
+  config:
+    # available expressions: {serviceName} {serviceId} {env}
+    key: config__{serviceName}__{env}
+    retry: 5
 ```
 
 #### Config Client Injection

@@ -1,23 +1,17 @@
 import { Module, DynamicModule, Global } from '@nestjs/common';
 import { ConsulConfig } from './consul-config.class';
 import * as Consul from 'consul';
-import { BootOptions, Options } from './consul-config.options';
+import { Options } from './consul-config.options';
 import { Boot } from 'nest-boot';
 
 @Global()
 @Module({})
 export class ConsulConfigModule {
-  static init(options: Options): DynamicModule {
-    const env = process.env.NODE_ENV || 'development';
-
+  static register(options: Options): DynamicModule {
     const consulConfigProvider = {
       provide: 'ConsulConfigClient',
-      useFactory: async (consul: Consul, boot: Boot): Promise<ConsulConfig> => {
-        let key = options.key;
-        if (typeof options.rename == 'function') {
-          key = options.rename(key, env);
-        }
-
+      useFactory: async (consul: Consul): Promise<ConsulConfig> => {
+        const key = options.key;
         const client = new ConsulConfig(consul, key, options);
         await client.init();
         return client;
@@ -32,18 +26,26 @@ export class ConsulConfigModule {
     };
   }
 
-  static initWithBoot(options: BootOptions): DynamicModule {
+  static registerByBoot(): DynamicModule {
     const env = process.env.NODE_ENV || 'development';
     const consulConfigProvider = {
       provide: 'ConsulConfigClient',
       useFactory: async (consul: Consul, boot: Boot): Promise<ConsulConfig> => {
-        let key = boot.get(options.path);
-        if (typeof options.rename == 'function') {
-          key = options.rename(key, env);
+        let key = boot.get('consul.config.key');
+        const retry = boot.get('consul.config.retry', 5);
+        const serviceName = boot.get('web.serviceName', 'localhost');
+        const serviceId = boot.get('web.serviceId', '');
+
+        if (!key) {
+          throw new Error('Please set consul.config.key in bootstrap.yml');
         }
+        key = key
+          .replace('{env}', env)
+          .replace('{serviceName}', serviceName)
+          .replace('{serviceId}', serviceId);
         const client = new ConsulConfig(consul, key, {
           key,
-          retry: options.retry,
+          retry,
         });
         await client.init();
         return client;
