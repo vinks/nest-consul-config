@@ -32,7 +32,7 @@ This is a [Nest](https://github.com/nestjs/nest) module for getting configuratio
 ## Installation
 
 ```bash
-$ npm i --save nest-consul nest-consul-config
+$ npm i --save nest-consul consul nest-consul-config
 ```
 
 ## Quick Start
@@ -44,13 +44,15 @@ import { Module } from '@nestjs/common';
 import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
 
+const env = process.env.NODE_ENV;
+
 @Module({
   imports: [
       ConsulModule.register({
         host: '127.0.0.1',
         port: 8500
       }),
-      ConsulConfigModule.register({key: `config__user-service__${process.env.NODE_ENV}`})
+      ConsulConfigModule.register({key: `config__user-service__${env}`})
   ],
 })
 export class ApplicationModule {}
@@ -62,13 +64,13 @@ If you use [nest-boot](https://github.com/miaowing/nest-boot) module.
 import { Module } from '@nestjs/common';
 import { ConsulModule } from 'nest-consul';
 import { ConsulConfigModule } from 'nest-consul-config';
-import { BootModule } from 'nest-boot';
+import { BootModule, BOOT_ADAPTER } from 'nest-boot';
 
 @Module({
   imports: [
-      ConsulModule.registerByBoot(),
+      ConsulModule.register({adapter: BOOT_ADAPTER}),
       BootModule.register(__dirname, 'bootstrap.yml'),
-      ConsulConfigModule.registerByBoot()
+      ConsulConfigModule.register({adapter: BOOT_ADAPTER})
   ],
 })
 export class ApplicationModule {}

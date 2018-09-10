@@ -1,24 +1,25 @@
 {
   "name": "nest-consul-config",
-  "version": "1.1.0",
-  "description": "Nest - modern, fast, powerful node.js web framework (@consul-config)",
+  "version": "1.2.0",
+  "description": "A Nest framework (node.js) module for getting configurations from consul kv",
   "author": "Miaowing <i@zfeng.net>",
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "precommit": "lint-staged",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@nestjs/common": "^5.0.0"
+    "@nestjs/common": "^5.0.0",
+    "nest-boot": "^1.1.0",
+    "nest-consul": "^2.2.0",
+    "consul": "^0.30.0"
   },
   "devDependencies": {
     "@nestjs/common": "^5.0.0",
     "@types/node": "^7.0.41",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
-    "nest-boot": "^0.2.0",
     "prettier": "^1.11.1",
     "ts-node": "^3.3.0",
     "typescript": "^2.8.0"
@@ -31,15 +32,8 @@
     "url": "https://github.com/miaowing/nest-consul-config/issues"
   },
   "homepage": "https://github.com/miaowing/nest-consul-config#readme",
-  "lint-staged": {
-    "*.ts": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "dependencies": {
     "@types/lodash": "^4.14.108",
-    "consul": "^0.30.0",
     "yamljs": "^0.3.0"
   }
 }

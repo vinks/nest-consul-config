@@ -1,9 +1,9 @@
 export interface ConsulConfigOptions {
-  key: string;
-  retry?: number;
+    retry?: number;
 }
 
 export interface Options {
-  key: string;
-  retry?: number;
+    adapter?: string;
+    key?: string;
+    retry?: number;
 }
