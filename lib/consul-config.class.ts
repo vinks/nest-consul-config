@@ -5,6 +5,7 @@ import { ConsulConfigOptions } from './consul-config.options';
 
 export class ConsulConfig {
     private configs: object;
+    private callback: (configs) => void = () => void 0;
     private readonly consul: Consul;
     private readonly key: string;
     private readonly retry: number;
@@ -36,11 +37,17 @@ export class ConsulConfig {
             } catch (e) {
                 this.configs = { parseErr: e };
             }
+
+            this.callback(this.configs);
         });
         watcher.on('error', err => {
             watcher.end();
             setTimeout(() => this.watch(), this.retry || 5000);
         });
+    }
+
+    onChange(callback: (configs) => void) {
+        this.callback = callback;
     }
 
     getKey(): string {

@@ -102,16 +102,45 @@ user:
 ```
 
 ```typescript
-import { Component } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectConfig, ConsulConfig } from 'nest-consul-config';
 
-@Component()
+@Injectable()
 export class TestService {
-  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
+  constructor(
+      @InjectConfig() private readonly config: ConsulConfig
+  ) {}
 
-  async do() {
-      const userInfo = await this.config.get('user.info', {name: 'judi'});
+  getUserInfo() {
+      const userInfo = this.config.get('user.info', {name: 'judi'});
       console.log(userInfo);
+  }
+}
+```
+
+Dynamic config update:
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { InjectConfig, ConsulConfig, DynamicConfig, ConfigValue, OnUpdate } from 'nest-consul-config';
+
+@Injectable()
+export class TestService extends DynamicConfig implements OnUpdate {
+  @ConfigValue('user.info', {name: 'judi'})
+  private readonly userInfo;
+  
+  constructor(
+      @InjectConfig() private readonly config: ConsulConfig
+  ) {
+      super(config);
+  }
+  
+  onUpdate() {
+      // Some service need re-initial after the config updated, you can execute it here.
+  }
+
+  getUserInfo() {
+      return this.userInfo;
   }
 }
 ```
