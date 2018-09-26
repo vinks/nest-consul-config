@@ -14,7 +14,7 @@ import {
 @Module({})
 export class ConsulConfigModule {
     static register(options: Options): DynamicModule {
-        const inject = [];
+        const inject = [CONSUL_PROVIDER];
         if (options.adapter === BOOT_ADAPTER) {
             inject.push(BOOTSTRAP_PROVIDER);
         }
