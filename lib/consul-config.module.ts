@@ -45,7 +45,7 @@ export class ConsulConfigModule {
                 await client.init();
                 return client;
             },
-            inject: [CONSUL_PROVIDER],
+            inject,
         };
 
         return {
