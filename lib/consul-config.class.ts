@@ -29,7 +29,7 @@ export class ConsulConfig {
     private watch() {
         const watcher = this.consul.watch({
             method: this.consul.kv.get,
-            options: { key: this.key },
+            options: { key: this.key, wait: '5m' },
         });
         watcher.on('change', (data, res) => {
             try {
