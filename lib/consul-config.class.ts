@@ -41,8 +41,7 @@ export class ConsulConfig {
             this.callback(this.configs);
         });
         watcher.on('error', err => {
-            watcher.end();
-            setTimeout(() => this.watch(), this.retry || 5000);
+
         });
     }
 
