@@ -4,6 +4,10 @@
 
 ## Description
 
+A component of [nestcloud](http://github.com/nest-cloud/nestcloud). NestCloud is a nest framework micro-service solution.
+  
+[中文文档](https://nestcloud.org/solutions/pei-zhi-zhong-xin)
+
 This is a [Nest](https://github.com/nestjs/nest) module to get configurations from consul kv.
 
 ## Installation
@@ -53,7 +57,7 @@ import { BootModule, BOOT_ADAPTER } from 'nest-boot';
 export class ApplicationModule {}
 ```
 
-##### bootstrap.yml
+##### Nest-boot config file
 
 ```yaml
 web:
@@ -121,6 +125,52 @@ export class TestService extends DynamicConfig implements OnUpdate {
   }
 }
 ```
+
+## API
+
+### class ConsulConfigModule
+
+#### static register\(options\): DynamicModule
+
+Import nest consul config module.
+
+| field | type | description |
+| :--- | :--- | :--- |
+| options.adapter | string | if you are using nest-boot module, please set BOOT_ADAPTER |
+| options.key | string | the key of consul kv |
+| options.retry | number | the max retry count when get configuration fail |
+
+### class ConsulConfig
+
+#### get\(path?: string, defaults?: any\): any
+
+Get configuration from consul kv.
+
+| field | type | description |
+| :--- | :--- | :--- |
+| path | string | the path of the configuration |
+| defaults | any | default value if the specific configuration is not exist |
+
+#### getKey\(\): string
+
+Get the current key.
+
+#### onChange\(callback: \(configs\) =&gt; void\): void
+
+watch the configurations.
+
+| field | type | description |
+| :--- | :--- | :--- |
+| callback | \(configs\) =&gt; void | callback function |
+
+#### async set\(path: string, value: any\): void
+
+update configuration.
+
+| field | type | description |
+| :--- | :--- | :--- |
+| path | string | the path of the configuration |
+| value | any | the configuration |
 
 ## Stay in touch
 
